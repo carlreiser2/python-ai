@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+  python-ai:
+    image: python-ai
+    container_name: python-ai
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 2G
+    volumes:
+      - ./src:/code/src
+    build:
+      context: .
+    ports:
+      - 8888:8888
+    environment:
+      NODE_ENV: docker
+      RUNTIME_CONTEXT_IDENTIFIER: "python-ai"
+      DB_NAME: juice
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: db
+      # DEBUG: "ioredis:*"
+      # NO_REDIS_CONNECTION_ALLOWED: "true"
+      # CONNECT_TO_LOOPBACK_REDIS: "true"
+      # REDIS_SENTINELS: '[{ "host": "network-core-redis-sentinel-1", "port": "26379" }]'
+    entrypoint: [ "jupyter", "lab", "--ip", "0.0.0.0", "--port", "8888", "--no-browser", "--allow-root" ]
+networks:
+  default:
+    external: true
+    name: core
